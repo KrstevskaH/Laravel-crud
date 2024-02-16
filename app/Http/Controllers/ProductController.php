@@ -31,9 +31,11 @@ class ProductController extends Controller
   
     /**
      * Store a newly created resource in storage.
-     */
+     */xamp
     public function store(Request $request): RedirectResponse
     {
+        // dd('Zdravo Jas ucham laravel');
+        // dd($request);
         $request->validate([
             'name' => 'required',
             'detail' => 'required',
