@@ -7,6 +7,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+
+
   
 class ProductController extends Controller
 {
@@ -20,18 +25,30 @@ class ProductController extends Controller
         return view('products.index',compact('products'))
                     ->with('i', (request()->input('page', 1) - 1) * 5);
     }
+    
   
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+
+     public function create()
     {
-        return view('products.create');
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            // User is authenticated
+            return view('products.create');
+        } else {
+            // User is not authenticated
+            // Redirect to login or handle accordingly
+            return redirect()->route('login')->with('error', 'You need to be logged in to create a product.');
+        }
     }
+
+
   
     /**
      * Store a newly created resource in storage.
-     */xamp
+     */
     public function store(Request $request): RedirectResponse
     {
         // dd('Zdravo Jas ucham laravel');
@@ -47,22 +64,54 @@ class ProductController extends Controller
                         ->with('success','Product created successfully.');
     }
   
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product): View
-    {
-        return view('products.show',compact('product'));
-    }
+
   
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product): View
+
+    public function show($id)
     {
-        return view('products.edit',compact('product'));
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            // Fetch the product by ID from the database
+            $product = Product::find($id);
+
+            // Check if the product exists
+            if ($product) {
+                // Product found, pass it to the view
+                return view('products.show', ['product' => $product]);
+            } else {
+                // Product not found, handle accordingly (redirect, show error, etc.)
+                return redirect()->route('dashboard')->with('error', 'Product not found.');
+            }
+        } else {
+            // User is not authenticated
+            // Redirect to login or handle accordingly
+            return redirect()->route('login')->with('error', 'You need to be logged in to view this product.');
+        }
     }
-  
+    
+
+    public function edit($id)
+    {
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            // User is authenticated
+            // Fetch the product by ID from the database
+            $product = Product::find($id);
+
+            if ($product) {
+                // Product found, pass it to the view
+                return view('products.edit', ['product' => $product]);
+            } else {
+                // Product not found, handle accordingly (redirect, show error, etc.)
+                return redirect()->route('dashboard')->with('error', 'Product not found.');
+            }
+        } else {
+            // User is not authenticated
+            // Redirect to login or handle accordingly
+            return redirect()->route('login')->with('error', 'You need to be logged in to edit a product.');
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      */

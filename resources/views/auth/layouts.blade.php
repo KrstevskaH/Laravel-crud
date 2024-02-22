@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,10 +48,10 @@
         </button>
         
             <!-- Collection of nav links, forms, and other content for toggling -->
-            <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start ">
+            <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start ms-3">
                 <div class="navbar-nav">
                     <a href="dashboard.php" class="nav-item nav-link active">Home</a>
-                    <a href="students.php" class="nav-item nav-link">Students</a>
+                    <a href="{{ route('products.index') }}" class="nav-item nav-link">Students</a>
                     <a href="api.php" class="nav-item nav-link">API</a>
                     <a href="news.php" class="nav-item nav-link">News</a>
                     <div class="nav-item dropdown">

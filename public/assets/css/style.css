@@ -1,3 +1,10 @@
 body {
-    background-color: gray;
+    background: rgb(109,115,119);
+background: linear-gradient(90deg, rgba(109,115,119,1) 0%, rgba(198,203,222,1) 22%, rgba(201,204,226,1) 67%, rgba(153,153,153,1) 100%);
 }
+
+.custom-table {
+    background-color: white;
+    
+}
+

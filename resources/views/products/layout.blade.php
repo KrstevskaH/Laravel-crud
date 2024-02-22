@@ -1,3 +1,5 @@
+@extends('auth.layouts')
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +9,7 @@
 <body>
     
 <div class="container">
-    @yield('content')
+    <!-- @yield('content') -->
 </div>
     
 </body>

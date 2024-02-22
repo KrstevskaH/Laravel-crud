@@ -1,10 +1,10 @@
 @extends('products.layout')
  
 @section('content')
-    <div class="row">
+    <div class="row mt-5">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2>Laravel 10 CRUD Example from scratch - ItSolutionStuff.com</h2>
+                <h2>Laravel 10 CRUD Example </h2>
             </div>
             <div class="pull-right">
                 <a class="btn btn-success" href="{{ route('products.create') }}"> Create New Product</a>
@@ -18,7 +18,7 @@
         </div>
     @endif
    
-    <table class="table table-bordered">
+    <table class="table table-bordered custom-table mt-3">
         <tr>
             <th>No</th>
             <th>Name</th>

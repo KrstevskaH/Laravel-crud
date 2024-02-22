@@ -1,7 +1,7 @@
 @extends('products.layout')
   
 @section('content')
-<div class="row">
+<div class="row mt-5">
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
             <h2>Add New Product</h2>

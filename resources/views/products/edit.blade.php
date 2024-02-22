@@ -1,7 +1,8 @@
-@extends('products.layout')
+
+@extends('auth.layouts')
    
 @section('content')
-    <div class="row">
+    <div class="row mt-5">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
                 <h2>Edit Product</h2>
