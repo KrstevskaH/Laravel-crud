@@ -9,8 +9,8 @@ Route::resource('products', ProductController::class);
 
 // Additional routes for create and edit with authentication middleware
 Route::middleware(['auth'])->group(function () {
-    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    // Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    // Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::resource('products', ProductController::class)->middleware(['auth']);
 });
 

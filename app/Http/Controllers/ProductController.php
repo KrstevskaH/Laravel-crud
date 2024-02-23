@@ -34,14 +34,13 @@ class ProductController extends Controller
      public function create()
     {
         // Check if the user is authenticated
-        if (Auth::check()) {
-            // User is authenticated
+        // if (Auth::check()) {
+            
             return view('products.create');
-        } else {
-            // User is not authenticated
-            // Redirect to login or handle accordingly
-            return redirect()->route('login')->with('error', 'You need to be logged in to create a product.');
-        }
+        // } else {
+            
+        //     return redirect()->route('login')->with('error', 'You need to be logged in to create a product.');
+        // }
     }
 
 
@@ -71,20 +70,19 @@ class ProductController extends Controller
     {
         // Check if the user is authenticated
         if (Auth::check()) {
-            // Fetch the product by ID from the database
+            
             $product = Product::find($id);
 
-            // Check if the product exists
+            
             if ($product) {
                 // Product found, pass it to the view
                 return view('products.show', ['product' => $product]);
             } else {
-                // Product not found, handle accordingly (redirect, show error, etc.)
+                
                 return redirect()->route('dashboard')->with('error', 'Product not found.');
             }
         } else {
-            // User is not authenticated
-            // Redirect to login or handle accordingly
+            
             return redirect()->route('login')->with('error', 'You need to be logged in to view this product.');
         }
     }
@@ -94,20 +92,18 @@ class ProductController extends Controller
     {
         // Check if the user is authenticated
         if (Auth::check()) {
-            // User is authenticated
-            // Fetch the product by ID from the database
+            
             $product = Product::find($id);
 
             if ($product) {
-                // Product found, pass it to the view
+                
                 return view('products.edit', ['product' => $product]);
             } else {
-                // Product not found, handle accordingly (redirect, show error, etc.)
+                
                 return redirect()->route('dashboard')->with('error', 'Product not found.');
             }
         } else {
-            // User is not authenticated
-            // Redirect to login or handle accordingly
+            
             return redirect()->route('login')->with('error', 'You need to be logged in to edit a product.');
         }
     }
