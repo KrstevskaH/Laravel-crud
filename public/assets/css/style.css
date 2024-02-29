@@ -8,3 +8,7 @@ background: linear-gradient(90deg, rgba(109,115,119,1) 0%, rgba(198,203,222,1) 2
     
 }
 
+.img-thumbnail{
+    height: 100px;
+    width: 100px;
+}

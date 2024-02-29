@@ -23,6 +23,11 @@
             <th>No</th>
             <th>Name</th>
             <th>Details</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Date Of Birth</th>
+            <th>Status</th>
+            <th>Image</th>
             <th width="280px">Action</th>
         </tr>
         @foreach ($products as $product)
@@ -30,6 +35,17 @@
             <td>{{ ++$i }}</td>
             <td>{{ $product->name }}</td>
             <td>{{ $product->detail }}</td>
+            <td>{{ $product->email }}</td>
+            <td>{{ $product->phone }}</td>
+            <td>{{ $product->dob }}</td>
+            <td>{{ $product->status }}</td>
+            <td>
+            @if(isset($product->image))
+                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }} Image" class="img-thumbnail" style="max-width: 100%;">
+                    @else
+                        No Image Available
+                    @endif
+            </td>
             <td>
                 <form action="{{ route('products.destroy',$product->id) }}" method="POST">
    

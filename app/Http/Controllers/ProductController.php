@@ -15,6 +15,11 @@ use App\Http\Controllers\Controller;
   
 class ProductController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -48,21 +53,71 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
-    {
-        // dd('Zdravo Jas ucham laravel');
-        // dd($request);
-        $request->validate([
-            'name' => 'required',
-            'detail' => 'required',
-        ]);
+    // public function store(Request $request): RedirectResponse
+    // {
+    //     // dd('Zdravo Jas ucham laravel');
+    //     // dd($request);
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'detail' => 'required',
+    //     ]);
         
-        Product::create($request->all());
+    //     Product::create($request->all());
          
-        return redirect()->route('products.index')
-                        ->with('success','Product created successfully.');
+    //     return redirect()->route('products.index')
+    //                     ->with('success','Product created successfully.');
+    // }
+
+
+
+
+
+//    
+
+public function store(Request $request): RedirectResponse
+{
+    $request->validate([
+        'name' => 'required',
+        'detail' => 'required',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        // Add other validation rules as needed
+    ]);
+
+    // Process the image upload
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        
+        // Generate a unique name for the image
+        $imageName = $image->getClientOriginalName();
+
+        // Store the image in the 'public' disk
+        $image->storeAs('public', $imageName,);
+
+        // Save the image name to the database
+        Product::create([
+            'name' => $request->input('name'),
+            'detail' => $request->input('detail'),
+            'image' => $imageName,
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'status' => $request->input('status'),
+            'dob' => $request->input('dob')
+            // Add other fields as needed
+        ]);
+
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
+
+    return redirect()->back()->with('error', 'Failed to upload image.');
+}
+
   
+    
+
+
+
+
+
 
   
 
