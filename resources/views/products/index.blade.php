@@ -7,7 +7,7 @@
                 <h2>Laravel 10 CRUD Example </h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" href="{{ route('products.create') }}"> Create New Product</a>
+                <a class="btn btn-success" href="{{ route('products.create') }}"> Create New Student</a>
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
             <td>{{ $product->status }}</td>
             <td>
             @if(isset($product->image))
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }} Image" class="img-thumbnail" style="max-width: 100%;">
+                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }} Image" class="img-thumbnail">
                     @else
                         No Image Available
                     @endif

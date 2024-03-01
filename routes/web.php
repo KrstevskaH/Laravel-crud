@@ -30,3 +30,9 @@ Route::prefix('auth')->group(function () {
     Route::get('/index', [LoginRegisterController::class, 'index'])->name('index');
     Route::get('/layout', [LoginRegisterController::class, 'layout'])->name('layout');
 });
+
+use App\Http\Controllers\DashboardController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});

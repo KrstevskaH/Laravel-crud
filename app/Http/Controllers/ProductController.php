@@ -1,192 +1,160 @@
 <?php
-  
+
 namespace App\Http\Controllers;
-  
+
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\View\View;
-
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 
-
-  
 class ProductController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
     }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): View
+
+    public function index()
     {
         $products = Product::latest()->paginate(5);
-        
-        return view('products.index',compact('products'))
-                    ->with('i', (request()->input('page', 1) - 1) * 5);
-    }
-    
-  
-    /**
-     * Show the form for creating a new resource.
-     */
 
-     public function create()
+        return view('products.index', compact('products'))
+            ->with('i', (request()->input('page', 1) - 1) * 5);
+    }
+
+    public function create()
     {
-        // Check if the user is authenticated
-        // if (Auth::check()) {
-            
-            return view('products.create');
-        // } else {
-            
-        //     return redirect()->route('login')->with('error', 'You need to be logged in to create a product.');
-        // }
+        return view('products.create');
     }
 
-
-  
-    /**
-     * Store a newly created resource in storage.
-     */
-    // public function store(Request $request): RedirectResponse
-    // {
-    //     // dd('Zdravo Jas ucham laravel');
-    //     // dd($request);
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'detail' => 'required',
-    //     ]);
-        
-    //     Product::create($request->all());
-         
-    //     return redirect()->route('products.index')
-    //                     ->with('success','Product created successfully.');
-    // }
-
-
-
-
-
-//    
-
-public function store(Request $request): RedirectResponse
-{
-    $request->validate([
-        'name' => 'required',
-        'detail' => 'required',
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        // Add other validation rules as needed
-    ]);
-
-    // Process the image upload
-    if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        
-        // Generate a unique name for the image
-        $imageName = $image->getClientOriginalName();
-
-        // Store the image in the 'public' disk
-        $image->storeAs('public', $imageName,);
-
-        // Save the image name to the database
-        Product::create([
-            'name' => $request->input('name'),
-            'detail' => $request->input('detail'),
-            'image' => $imageName,
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'status' => $request->input('status'),
-            'dob' => $request->input('dob')
-            // Add other fields as needed
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required',
+            'detail' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            // Add other validation rules as needed
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully.');
+        // Process the image upload
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            // Generate a unique name for the image
+            $imageName = $image->getClientOriginalName();
+
+            // Store the image in the 'public' disk
+            $image->storeAs('public', $imageName);
+
+            // Save the image name to the database
+            Product::create([
+                'name' => $request->input('name'),
+                'detail' => $request->input('detail'),
+                'image' => $imageName,
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
+                'status' => $request->input('status'),
+                'dob' => $request->input('dob'),
+                // Add other fields as needed
+            ]);
+
+            return redirect()->route('products.index')->with('success', 'Student created successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Failed to upload image.');
     }
-
-    return redirect()->back()->with('error', 'Failed to upload image.');
-}
-
-  
-    
-
-
-
-
-
-
-  
 
     public function show($id)
     {
-        // Check if the user is authenticated
         if (Auth::check()) {
-            
             $product = Product::find($id);
 
-            
             if ($product) {
-                // Product found, pass it to the view
                 return view('products.show', ['product' => $product]);
             } else {
-                
-                return redirect()->route('dashboard')->with('error', 'Product not found.');
+                return redirect()->route('dashboard')->with('error', 'Student not found.');
             }
         } else {
-            
-            return redirect()->route('login')->with('error', 'You need to be logged in to view this product.');
+            return redirect()->route('login')->with('error', 'You need to be logged in to view this student.');
         }
     }
-    
 
     public function edit($id)
     {
-        // Check if the user is authenticated
         if (Auth::check()) {
-            
             $product = Product::find($id);
 
             if ($product) {
-                
                 return view('products.edit', ['product' => $product]);
             } else {
-                
-                return redirect()->route('dashboard')->with('error', 'Product not found.');
+                return redirect()->route('dashboard')->with('error', 'Student not found.');
             }
         } else {
-            
             return redirect()->route('login')->with('error', 'You need to be logged in to edit a product.');
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Product $product): RedirectResponse
     {
         $request->validate([
             'name' => 'required',
             'detail' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        
-        $product->update($request->all());
-        
-        return redirect()->route('products.index')
-                        ->with('success','Product updated successfully');
+
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists
+            if ($product->image) {
+                Storage::delete('public/' . $product->image);
+            }
+
+            $image = $request->file('image');
+            $imageName = $image->getClientOriginalName();
+
+            // Store the new image in the 'public' disk
+            $image->storeAs('public', $imageName);
+
+            // Update the product with the new image name
+            $product->update([
+                'name' => $request->input('name'),
+                'detail' => $request->input('detail'),
+                'image' => $imageName,
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
+                'status' => $request->input('status'),
+                'dob' => $request->input('dob'),
+                // Add other fields as needed
+            ]);
+
+            return redirect()->route('products.index')->with('success', 'Student updated successfully with a new image.');
+        }
+
+        // No new image uploaded, update other fields without touching the image
+        $product->update([
+            'name' => $request->input('name'),
+            'detail' => $request->input('detail'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'status' => $request->input('status'),
+            'dob' => $request->input('dob'),
+            // Add other fields as needed
+        ]);
+
+        return redirect()->route('products.index')->with('success', 'Student updated successfully without changing the image.');
     }
-  
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Product $product): RedirectResponse
     {
+        // Delete the product image if it exists
+        if ($product->image) {
+            Storage::delete('public/' . $product->image);
+        }
+
+        // Delete the product
         $product->delete();
-         
-        return redirect()->route('products.index')
-                        ->with('success','Product deleted successfully');
+
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }
 }
