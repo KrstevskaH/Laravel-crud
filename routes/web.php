@@ -51,5 +51,4 @@ Route::get('/news/{news}/edit', [NewsController::class, 'edit'])->name('news.edi
 Route::put('/news/{news}', [NewsController::class, 'update'])->name('news.update');
 Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('news.destroy');
 Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
-Route::get('/news/active', [NewsController::class, 'activeNews'])->name('news.active');
-Route::get('/news/inactive', [NewsController::class, 'inactiveNews'])->name('news.inactive');
+Route::post('/news/filter', [NewsController::class, 'filter'])->name('news.filter');

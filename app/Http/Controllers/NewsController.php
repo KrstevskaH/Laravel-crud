@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\JsonResponse;
 
 use App\Models\News;
 use Illuminate\Http\Request;
@@ -108,21 +109,17 @@ class NewsController extends Controller
     }
 
 
-    public function activeNews()
-{
-    $activeNews = News::where('status', 'active')->paginate(10);
-    return view('news.active', compact('activeNews'));
-}
+  
 
-public function inactiveNews()
-{
-    $inactiveNews = News::where('status', 'inactive')->paginate(10);
-    return view('news.inactive', compact('inactiveNews'));
-}
-public function show($id)
-{
-    $news = News::findOrFail($id);
-    return view('news.show', compact('news'));
-}
 
+
+public function filter(Request $request): JsonResponse
+{
+    $status = $request->input('status', 'all');
+    logger("Received status: $status");
+
+    $news = ($status === 'all') ? News::all() : News::where('status', $status)->get();
+
+    return response()->json($news);
+}
 }
