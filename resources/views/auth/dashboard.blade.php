@@ -3,8 +3,6 @@
 @section('content')
 
 <div class="row justify-content-center mt-5">
-
-
     <div class="col-md-2">
         <div class="card mb-4">
             <div class="card-header bg-success text-white">
@@ -16,62 +14,39 @@
         </div>
     </div>
 
-
     <div class="col-md-2">
         <div class="card mb-4">
             <div class="card-header bg-success text-white">
+                
                 News
             </div>
             <div class="card-body">
-                <p class="card-text">1</p>
+                <p class="card-text">{{ $activeNewsCount + $inactiveNewsCount }}</p>
             </div>
         </div>
     </div>
 
-
     <div class="col-md-2">
         <div class="card mb-4">
-            <div class="card-header bg-success text-white">
+            <a href="{{ route('news.active') }}" class="card-header bg-success text-white">
                 Active
-            </div>
+            </a>
             <div class="card-body">
-                <p class="card-text">2</p>
+                <p class="card-text">{{ $activeNewsCount }}</p>
             </div>
         </div>
     </div>
-
 
     <div class="col-md-2">
         <div class="card mb-4">
-            <div class="card-header bg-success text-white">
+            <a href="{{ route('news.inactive') }}" class="card-header bg-success text-white">
                 Inactive
-            </div>
+            </a>
             <div class="card-body">
-                <p class="card-text">3</p>
+                <p class="card-text">{{ $inactiveNewsCount }}</p>
             </div>
         </div>
     </div>
-
-    <!-- Additional Content (Your existing card) -->
-    <!-- <div class="col-md-2">
-        <div class="card mb-4">
-            <div class="card-header bg-dark text-white">
-                Dashboard
-            </div>
-            <div class="card-body">
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-success">
-                        {{ $message }}
-                    </div>
-                @else
-                    <div class="alert alert-success">
-                        You are logged in!
-                    </div>       
-                @endif                
-            </div>
-        </div>
-    </div> -->
-
 </div>
 
 @endsection

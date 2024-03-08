@@ -36,3 +36,20 @@ use App\Http\Controllers\DashboardController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
+
+use App\Http\Controllers\NewsController;
+
+// List news articles
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+
+// Display the form for creating a new news article
+Route::get('/news/create', [NewsController::class, 'create'])->name('news.create');
+
+// Store a new news article
+Route::post('/news', [NewsController::class, 'store'])->name('news.store');
+Route::get('/news/{news}/edit', [NewsController::class, 'edit'])->name('news.edit');
+Route::put('/news/{news}', [NewsController::class, 'update'])->name('news.update');
+Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('news.destroy');
+Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/news/active', [NewsController::class, 'activeNews'])->name('news.active');
+Route::get('/news/inactive', [NewsController::class, 'inactiveNews'])->name('news.inactive');

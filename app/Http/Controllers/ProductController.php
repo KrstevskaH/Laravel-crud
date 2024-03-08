@@ -125,7 +125,7 @@ class ProductController extends Controller
                 'phone' => $request->input('phone'),
                 'status' => $request->input('status'),
                 'dob' => $request->input('dob'),
-                // Add other fields as needed
+                
             ]);
 
             return redirect()->route('products.index')->with('success', 'Student updated successfully with a new image.');
@@ -139,7 +139,7 @@ class ProductController extends Controller
             'phone' => $request->input('phone'),
             'status' => $request->input('status'),
             'dob' => $request->input('dob'),
-            // Add other fields as needed
+            
         ]);
 
         return redirect()->route('products.index')->with('success', 'Student updated successfully without changing the image.');

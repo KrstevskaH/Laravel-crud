@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product; 
+use App\Models\News;
 use Illuminate\View\View;
 
 use Illuminate\Http\Request;
@@ -16,16 +17,19 @@ class DashboardController extends Controller
      */
     public function index(): View
     {
-        
+        // Count the total number of students
         $studentCount = Product::count();
 
-        
+        // Count the number of active and inactive news
+        $activeNewsCount = News::where('status', 'active')->count();
+        $inactiveNewsCount = News::where('status', 'inactive')->count();
+
+        // Retrieve the latest products
         $products = Product::latest()->paginate(5);
 
-        return view('auth.dashboard', compact('products', 'studentCount'))
+        return view('auth.dashboard', compact('products', 'studentCount', 'activeNewsCount', 'inactiveNewsCount'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
-
     /**
      * Show the form for creating a new resource.
      */
