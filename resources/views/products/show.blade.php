@@ -54,6 +54,12 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-6">
                     <div class="form-group">
+                        <strong>University Name:</strong>
+                        {{ isset($product->university) ? $product->university->name : '' }}
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <div class="form-group">
                         <strong>Image:</strong>
                         @if(isset($product->image))
                             <img src="{{ asset('storage/' . $product->image) }}" alt="Product Image" class="img-thumbnail" style="max-width: 100%;">

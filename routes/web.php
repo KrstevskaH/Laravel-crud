@@ -52,3 +52,15 @@ Route::put('/news/{news}', [NewsController::class, 'update'])->name('news.update
 Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('news.destroy');
 Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
 Route::post('/news/filter', [NewsController::class, 'filter'])->name('news.filter');
+Route::get('/news/active', [NewsController::class, 'active'])->name('news.active');
+Route::get('/news/inactive', [NewsController::class, 'inactive'])->name('news.inactive');
+
+
+
+use App\Http\Controllers\ApiController;
+
+Route::get('/universities', [ApiController::class, 'index']);
+Route::get('/api/universities', [ApiController::class, 'index'])->name('api.universities');
+Route::post('/fetch-universities', [ApiController::class, 'fetchUniversities'])->name('fetch-universities');
+Route::get('/search-universities', [ApiController::class, 'search'])->name('search-universities');
+

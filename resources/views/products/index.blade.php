@@ -27,7 +27,9 @@
             <th>Phone</th>
             <th>Date Of Birth</th>
             <th>Status</th>
+            <th>University_ID</th>
             <th>Image</th>
+           
             <th width="280px">Action</th>
         </tr>
         @foreach ($products as $product)
@@ -39,6 +41,8 @@
             <td>{{ $product->phone }}</td>
             <td>{{ $product->dob }}</td>
             <td>{{ $product->status }}</td>
+            <td>{{ $product->university->name}}</td>
+            
             <td>
             @if(isset($product->image))
                         <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }} Image" class="img-thumbnail">

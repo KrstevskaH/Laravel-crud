@@ -10,14 +10,17 @@
     @endif
 
     <a href="{{ route('news.create') }}" class="btn btn-success mb-2">Create News</a>
-    <div class="form-group">
-        <label for="status" class="font-weight-bold">Filter News by Status:</label>
-        <select id="statusFilter" class="form-control">
+    <div class="form-group row mb-2"> 
+    <label for="status" class="font-weight-bold col-sm-auto col-form-label">Filter News:</label> 
+    <div class="col-sm-auto">
+        <select id="statusFilter" class="form-control form-control-sm"> 
             <option value="all">All News</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
         </select>
     </div>
+</div>
+
     <div class="row mt-3">
         @forelse($news as $article)
             <div class="col-md-3 mb-4">

@@ -7,7 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\Controller;
+use App\Models\Universities;
 
 class ProductController extends Controller
 {
@@ -18,15 +18,23 @@ class ProductController extends Controller
 
     public function index()
     {
+        // Fetch products
         $products = Product::latest()->paginate(5);
 
-        return view('products.index', compact('products'))
+        // Fetch universities
+        $universities = Universities::all();
+
+        // Return the view with both products and universities
+        return view('products.index', compact('products', 'universities'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     public function create()
     {
-        return view('products.create');
+        // Fetch universities
+        $universities = Universities::all();
+
+        return view('products.create', compact('universities'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -35,7 +43,7 @@ class ProductController extends Controller
             'name' => 'required',
             'detail' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            // Add other validation rules as needed
+            'university_id' => 'required', // Add validation for university_id
         ]);
 
         // Process the image upload
@@ -48,11 +56,12 @@ class ProductController extends Controller
             // Store the image in the 'public' disk
             $image->storeAs('public', $imageName);
 
-            // Save the image name to the database
+            // Save the image name, university_id, and other fields to the database
             Product::create([
                 'name' => $request->input('name'),
                 'detail' => $request->input('detail'),
                 'image' => $imageName,
+                'university_id' => $request->input('university_id'), // Store university_id
                 'email' => $request->input('email'),
                 'phone' => $request->input('phone'),
                 'status' => $request->input('status'),
@@ -85,9 +94,10 @@ class ProductController extends Controller
     {
         if (Auth::check()) {
             $product = Product::find($id);
-
+            $universities = Universities::all(); // Fetch universities
+    
             if ($product) {
-                return view('products.edit', ['product' => $product]);
+                return view('products.edit', compact('product', 'universities')); // Pass universities to the view
             } else {
                 return redirect()->route('dashboard')->with('error', 'Student not found.');
             }
@@ -97,53 +107,54 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, Product $product): RedirectResponse
-    {
-        $request->validate([
-            'name' => 'required',
-            'detail' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    $request->validate([
+        'name' => 'required',
+        'detail' => 'required',
+        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        if ($request->hasFile('image')) {
-            // Delete the old image if it exists
-            if ($product->image) {
-                Storage::delete('public/' . $product->image);
-            }
-
-            $image = $request->file('image');
-            $imageName = $image->getClientOriginalName();
-
-            // Store the new image in the 'public' disk
-            $image->storeAs('public', $imageName);
-
-            // Update the product with the new image name
-            $product->update([
-                'name' => $request->input('name'),
-                'detail' => $request->input('detail'),
-                'image' => $imageName,
-                'email' => $request->input('email'),
-                'phone' => $request->input('phone'),
-                'status' => $request->input('status'),
-                'dob' => $request->input('dob'),
-                
-            ]);
-
-            return redirect()->route('products.index')->with('success', 'Student updated successfully with a new image.');
+    if ($request->hasFile('image')) {
+        // Delete the old image if it exists
+        if ($product->image) {
+            Storage::delete('public/' . $product->image);
         }
 
-        // No new image uploaded, update other fields without touching the image
+        $image = $request->file('image');
+        $imageName = $image->getClientOriginalName();
+
+        // Store the new image in the 'public' disk
+        $image->storeAs('public', $imageName);
+
+        // Update the product with the new image name
         $product->update([
             'name' => $request->input('name'),
             'detail' => $request->input('detail'),
+            'image' => $imageName,
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
             'status' => $request->input('status'),
             'dob' => $request->input('dob'),
-            
+            'university_id' => $request->input('university_id'),
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Student updated successfully without changing the image.');
+        return redirect()->route('products.index')->with('success', 'Student updated successfully with a new image.');
     }
+
+    // No new image uploaded, update other fields without touching the image
+    $product->update([
+        'name' => $request->input('name'),
+        'detail' => $request->input('detail'),
+        'email' => $request->input('email'),
+        'phone' => $request->input('phone'),
+        'status' => $request->input('status'),
+        'dob' => $request->input('dob'),
+        'university_id' => $request->input('university_id'),
+    ]);
+
+    return redirect()->route('products.index')->with('success', 'Student updated successfully without changing the image.');
+}
+
 
     public function destroy(Product $product): RedirectResponse
     {
